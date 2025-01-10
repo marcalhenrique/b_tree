@@ -1,0 +1,1 @@
+make && ./b_tree && make clean
