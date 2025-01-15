@@ -7,6 +7,15 @@
 
 
 void generateInputFile(const std::string& filename, int values, int min, int max) {
+    /*
+     * @brief Função para gerar um arquivo de entrada com valores aleatórios
+        * @param filename: nome do arquivo
+        * @param values: quantidade de valores
+        * @param min: valor mínimo
+        * @param max: valor máximo
+     * @return void  
+    */
+   
     std::ofstream outFile(filename);
 
     if (!outFile) {
