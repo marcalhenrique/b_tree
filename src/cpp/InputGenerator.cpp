@@ -1,11 +1,5 @@
 #include "../h/InputGenerator.h"
 
-#include <iostream>
-#include <fstream>
-#include <cstdlib> // std::rand, std::srand
-#include <ctime>
-
-
 void generateInputFile(const std::string& filename, int values, int min, int max) {
     /*
      * @brief Função para gerar um arquivo de entrada com valores aleatórios
@@ -15,7 +9,6 @@ void generateInputFile(const std::string& filename, int values, int min, int max
         * @param max: valor máximo
      * @return void  
     */
-   
     std::ofstream outFile(filename);
 
     if (!outFile) {

@@ -1,10 +1,5 @@
 #include "../h/BlockCommander.h"
 
-#include <fstream>
-#include <iostream>
-
-// TODO: Fazer uma função para salvar os blocos.
-
 void BlockCommander::saveBlockFiles(std::vector<std::string>& blockFiles, std::vector<int> block ,size_t blockCount){
     /*  
      * @brief Função para salvar os blocos em arquivos
@@ -13,7 +8,7 @@ void BlockCommander::saveBlockFiles(std::vector<std::string>& blockFiles, std::v
         * @param blockCount: contador de blocos
     * @return void
     */
-
+    std::filesystem::create_directory("block_files");
     std::string tempFilename = "block_files/block_" + std::to_string(blockCount) + ".txt";
     blockFiles.push_back(tempFilename);
     std::ofstream outFile(tempFilename);
@@ -35,7 +30,6 @@ std::vector<std::vector<int>> BlockCommander::splitBlock(const std::string& file
         * @param blockFiles: vetor de strings que armazena os nomes dos arquivos
         * @return std::vector<std::vector<int>>: vetor de vetores de inteiros que armazena os blocos  
     */
-
     if (!inFile) {
         std::cerr << "Error opening file " << filename << std::endl;
         return {};
