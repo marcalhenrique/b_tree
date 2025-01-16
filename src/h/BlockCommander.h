@@ -8,14 +8,13 @@
 #include <filesystem>
 
 class BlockCommander {
-    public:      
-        std::vector<std::vector<int>> splitBlock(const std::string& filename, size_t blockSize, std::vector<std::string>& blockFiles);
-    
-    private:
-        void saveBlockFiles(std::vector<std::string>& blockFiles, std::vector<int> block,size_t blockCount);
+    public:
+        std::vector<std::vector<int>> sortBlocks(std::string filename, size_t blockSize);
+    private:      
+        std::vector<std::vector<int>> splitBlock(const std::string& filename, size_t blockSize);
         
 };
 
 
 
-#endif
+#endif // BLOCKCOMMANDER_H

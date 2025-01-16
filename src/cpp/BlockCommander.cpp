@@ -1,27 +1,8 @@
 #include "../h/BlockCommander.h"
+#include "../h/QuickSort.h"
+#include "../h/SaveFiles.h"
 
-void BlockCommander::saveBlockFiles(std::vector<std::string>& blockFiles, std::vector<int> block ,size_t blockCount){
-    /*  
-     * @brief Função para salvar os blocos em arquivos
-        * @param blockFiles: vetor de strings que armazena os nomes dos arquivos
-        * @param block: vetor de inteiros que armazena os valores do bloco
-        * @param blockCount: contador de blocos
-    * @return void
-    */
-    std::filesystem::create_directory("block_files");
-    std::string tempFilename = "block_files/block_" + std::to_string(blockCount) + ".txt";
-    blockFiles.push_back(tempFilename);
-    std::ofstream outFile(tempFilename);
-    for (int num: block) {
-        outFile << num << "\n";
-    }
-    outFile.close();
-
-}
-
-
-
-std::vector<std::vector<int>> BlockCommander::splitBlock(const std::string& filename, size_t blockSize, std::vector<std::string>& blockFiles){
+std::vector<std::vector<int>> BlockCommander::splitBlock(const std::string& filename, size_t blockSize){
     std::ifstream inFile(filename);
     /*
      * @abrief Função para dividir o arquivo em blocos
@@ -30,11 +11,7 @@ std::vector<std::vector<int>> BlockCommander::splitBlock(const std::string& file
         * @param blockFiles: vetor de strings que armazena os nomes dos arquivos
         * @return std::vector<std::vector<int>>: vetor de vetores de inteiros que armazena os blocos  
     */
-    if (!inFile) {
-        std::cerr << "Error opening file " << filename << std::endl;
-        return {};
-    }
-
+    SaveFiles saveFiles;
     std::vector<std::vector<int>> blocks; // armazenar todos os blocos
     std::vector<int> block;
     int value;
@@ -45,7 +22,6 @@ std::vector<std::vector<int>> BlockCommander::splitBlock(const std::string& file
 
         if (block.size() == blockSize) {
             blocks.push_back(block);
-            saveBlockFiles(blockFiles, block, blockCount);
             block.clear();
             blockCount++;
         }
@@ -56,13 +32,40 @@ std::vector<std::vector<int>> BlockCommander::splitBlock(const std::string& file
     //sobra de arquivo
     if (!block.empty()){
         blocks.push_back(block);
-        saveBlockFiles(blockFiles, block, blockCount);
         block.clear();
     }
 
-    inFile.close();
-    std::cout << "File split into " << blockFiles.size() << " blocks." << std::endl;
+
+    for (size_t i = 0; i < blocks.size(); i++){
+        std::string tempFilename = "block_files/disordered_block_" + std::to_string(i) + ".txt";
+        saveFiles.saveFile(blocks[i], tempFilename);
+        
+    }
 
     return blocks;
+}
+
+std::vector<std::vector<int>> BlockCommander::sortBlocks(std::string filename, size_t blockSize){
+    /*
+     * @abrief Função para ordenar os blocos
+        * @param filename: nome do arquivo  
+        * @param blockSize: tamanho do bloco
+        * @return std::vector<std::vector<int>>: vetor de vetores de inteiros que armazena os blocos ordenados   
+    */
+    SaveFiles saveFiles;
+    QuickSort quickSort;
+    std::vector<std::vector<int>> blocks = splitBlock(filename, blockSize);
+    std::vector<std::vector<int>> sortedBlocks;
+    std::vector<int> sortedBlock;
+
+
+    for (size_t i = 0; i < blocks.size(); i++){
+        sortedBlock = quickSort.sort(blocks[i], 0, blocks[i].size() - 1);
+        sortedBlocks.push_back(sortedBlock);
+        std::string tempFilename = "block_files/ordered_block_" + std::to_string(i) + ".txt";
+        saveFiles.saveFile(sortedBlock, tempFilename);
+    }
+    
+    return sortedBlocks;
 }
 
