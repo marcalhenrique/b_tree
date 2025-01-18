@@ -16,6 +16,15 @@ Depois compile o projeto utilizando o arquivo run.sh:
 ```
 Esse arquivo compila, executa e limpa o projeto.
 
+## Notas
+É possível fazer a intercalação dos blocos com o Quicksort, a implementação é mais facil entretanto todos os elementos são carregados na memória.  
+Utilizando o Min-Heap somente os menores elementos ativos são armazenados.  
+Estrutura da intercalação utilizando o Min-Heap:
+* Inserir o menor elemento de cada bloco no min-heap.
+* Remova o menor valor
+* Insira o próximo valor do bloco que continha o valor removido.
+* Repita até que todos os blocos estejam vazios.
+
 ## TODOs
 ~~1. Criar MakeFile para compilar o projeto.~~  
 ~~2. Implementar o arquivo de dados.~~  
