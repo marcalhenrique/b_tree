@@ -102,6 +102,7 @@ void BTree<T, MIN_DEGREE>::splitChild(BTreeNode<T, MIN_DEGREE>* parent, int inde
     ++parent->numKeys;
 }
 
+// -------------------- Busca
 template <typename T, const unsigned int MIN_DEGREE>
 bool BTreeNode<T, MIN_DEGREE>::search(T key){
     unsigned int i = 0;
@@ -128,9 +129,7 @@ bool BTree<T, MIN_DEGREE>::search(T key){
     return root->search(key);
 }
 
-
-
-
+// ------------- Print
 template <typename T, const unsigned int MIN_DEGREE>
 void BTreeNode<T, MIN_DEGREE>::print(){
     for (unsigned int i = 0; i < numKeys; i++) {
@@ -153,6 +152,70 @@ void BTree<T, MIN_DEGREE>::print(){
 
     }
         
+}
+
+
+// --------------------------- Serializacao
+
+template <typename T, const unsigned int MIN_DEGREE>
+void BTreeNode<T, MIN_DEGREE>::serialize(std::ofstream& outFile){
+    outFile << numKeys << " " << isLeaf << " ";
+
+    for (unsigned int i = 0; i < numKeys; i++){
+        outFile << keys[i] << " "; // isso daqui pode ser com \n tambem
+    }
+
+    if (!isLeaf){
+        for (unsigned int i = 0; i <= numKeys; i++){
+            children[i]->serialize(outFile);
+        }
+    }
+    outFile << "# ";
+}
+
+template <typename T, const unsigned int MIN_DEGREE>
+void BTree<T, MIN_DEGREE>::serialize(const std::string& filename){
+    std::ofstream outFile(filename);
+    if (!outFile){
+        std::cerr << "Error opening file " << filename << std::endl;
+        return;
+    }
+    if (root){
+        root->serialize(outFile);
+    }
+    outFile.close();
+}
+
+template <typename T, const unsigned int MIN_DEGREE>
+void BTreeNode<T, MIN_DEGREE>::deserialize(std::ifstream& inFile){
+    inFile >> numKeys >> isLeaf;
+
+    for (unsigned int i = 0; i < numKeys; i++){
+        inFile >> keys[i];
+    }
+
+    if (!isLeaf){
+        for (unsigned int i = 0; i <= numKeys; i++){
+            children[i] = new BTreeNode(isLeaf);
+            children[i]->deserialize(inFile);
+        }
+    }
+
+    std::string endMarker;
+    inFile >> endMarker;
+
+}
+
+template <typename T, const unsigned int MIN_DEGREE>
+void BTree<T, MIN_DEGREE>::deserialize(const std::string& filename){
+    std::ifstream inFile(filename);
+    if (!inFile){
+        std::cerr << "Error opening file " << filename << std::endl;
+        return;
+    }
+    root = new BTreeNode<T, MIN_DEGREE>(true);
+    root->deserialize(inFile);
+    inFile.close();
 }
 
 
