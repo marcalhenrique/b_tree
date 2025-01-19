@@ -27,23 +27,20 @@ int main(){
 
     BTree<int, 3> btree;
     
-    // for (int value : mergedBlock ) {
-    //     btree.insert(value);
-    // }
+    for (int value : mergedBlock ) {
+        btree.insert(value);
+    }
 
-    // std::cout << "Estrutura da arvore: " << std::endl;
-    // btree.print();
+    btree.serialize("btree_data.txt");
+    
+    BTree<int, 3> newTree;
+    newTree.deserialize("btree_data.txt");
 
-    btree.insert(10);
-    btree.insert(20);
-    btree.insert(5);
-    btree.insert(6);
-    btree.insert(12);
-    btree.insert(30);
-    btree.insert(7);
-    btree.insert(17);
+    std::cout << "Estrutura da árvore após a desserialização:" << std::endl;
+    //newTree.print();
+    //std::cout << std::endl;
 
-    btree.print();
+    
 
 
 

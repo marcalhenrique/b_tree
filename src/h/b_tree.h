@@ -2,6 +2,7 @@
 #define B_TREE_H
 
 #include <iostream>
+#include <fstream>
 
 
 template <typename T, const unsigned int MIN_DEGREE>
@@ -15,6 +16,9 @@ class BTreeNode {
         BTreeNode(bool isLeaf): isLeaf(isLeaf), numKeys(0) {}
         void print();
         bool search(T key);
+
+        void serialize(std::ofstream& outFile);
+        void deserialize(std::ifstream& inFile);
 };
 
 template <typename T, const unsigned int MIN_DEGREE>
@@ -26,6 +30,9 @@ class BTree {
         bool search(T key);
         void remove(T key); // nao sei se vou implementar
         void print();
+
+        void serialize(const std::string& filename);
+        void deserialize(const std::string& filename);
     
     private:
         BTreeNode<T, MIN_DEGREE>* root;
